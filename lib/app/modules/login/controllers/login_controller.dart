@@ -15,6 +15,11 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
   var usernameError = ''.obs;
   var passwordError = ''.obs;
+  var isPasswordHidden = true.obs;
+
+  void togglePasswordVisibility() {
+    isPasswordHidden.value = !isPasswordHidden.value;
+  }
 
   void loginNow() async {
     usernameError.value = '';
@@ -45,7 +50,7 @@ class LoginController extends GetxController {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        authToken.write('token', data['token']);
+        authToken.write('token', data['access_token']);
         Get.offAll(() => const DashboardView());
       } else {
         Get.snackbar(

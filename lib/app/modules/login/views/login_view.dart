@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -22,7 +21,7 @@ class LoginView extends GetView<LoginController> {
         ),
         child: Center(
           child: SingleChildScrollView(
-            child: Obx(() => Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Lottie.asset(
@@ -31,25 +30,27 @@ class LoginView extends GetView<LoginController> {
                   height: 200,
                 ),
                 const SizedBox(height: 20),
-                _buildTextField(
-                  controller.usernameController,
-                  'Username',
-                  Icons.person,
-                  false,
-                  controller.usernameError.value,
-                ),
+                Obx(() => _buildTextField(
+                      controller.usernameController,
+                      'Username',
+                      Icons.person,
+                      false,
+                      controller.usernameError.value,
+                      controller,
+                    )),
                 const SizedBox(height: 10),
-                _buildTextField(
-                  controller.passwordController,
-                  'Password',
-                  Icons.lock,
-                  true,
-                  controller.passwordError.value,
-                ),
+                Obx(() => _buildTextField(
+                      controller.passwordController,
+                      'Password',
+                      Icons.lock,
+                      true,
+                      controller.passwordError.value,
+                      controller,
+                    )),
                 const SizedBox(height: 25),
-                _buildLoginButton(controller),
+                Obx(() => _buildLoginButton(controller)),
               ],
-            )),
+            ),
           ),
         ),
       ),
@@ -57,11 +58,12 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget _buildTextField(
-    TextEditingController controller,
+    TextEditingController fieldController,
     String hint,
     IconData icon,
     bool isPassword,
     String errorText,
+    LoginController controller,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -82,13 +84,25 @@ class LoginView extends GetView<LoginController> {
               ],
             ),
             child: TextField(
-              controller: controller,
-              obscureText: isPassword,
+              controller: fieldController,
+              obscureText: isPassword ? controller.isPasswordHidden.value : false,
               decoration: InputDecoration(
                 hintText: hint,
                 prefixIcon: Icon(icon, color: Colors.blueAccent),
+                suffixIcon: isPassword
+                    ? IconButton(
+                        icon: Icon(
+                          controller.isPasswordHidden.value
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: controller.togglePasswordVisibility,
+                      )
+                    : null,
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               ),
             ),
           ),
@@ -106,14 +120,15 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget _buildLoginButton(LoginController controller) {
-    return Obx(() => GestureDetector(
+    return GestureDetector(
       onTap: controller.isLoading.value ? null : controller.loginNow,
       child: Container(
         width: 200,
         height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: controller.isLoading.value ? Colors.grey : Colors.blueAccent,
+          color:
+              controller.isLoading.value ? Colors.grey : Colors.blueAccent,
           boxShadow: [
             BoxShadow(
               color: Colors.blueAccent.withOpacity(0.4),
@@ -139,6 +154,6 @@ class LoginView extends GetView<LoginController> {
                 ),
         ),
       ),
-    ));
+    );
   }
 }

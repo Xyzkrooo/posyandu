@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "PosyanduSakura.com" "\0"
-            VALUE "FileDescription", "nama_project" "\0"
+            VALUE "FileDescription", "posyandu" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "nama_project" "\0"
+            VALUE "InternalName", "posyandu" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 PosyanduSakura.com. All rights reserved." "\0"
-            VALUE "OriginalFilename", "nama_project.exe" "\0"
-            VALUE "ProductName", "nama_project" "\0"
+            VALUE "OriginalFilename", "posyandu.exe" "\0"
+            VALUE "ProductName", "posyandu" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,6 @@
 {
-    "name": "nama_project",
-    "short_name": "nama_project",
+    "name": "posyandu",
+    "short_name": "posyandu",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

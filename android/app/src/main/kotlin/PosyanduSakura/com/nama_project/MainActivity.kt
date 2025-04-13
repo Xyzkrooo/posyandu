@@ -1,4 +1,4 @@
-package PosyanduSakura.com.nama_project
+package PosyanduSakura.com.posyandu
 
 import io.flutter.embedding.android.FlutterActivity
 

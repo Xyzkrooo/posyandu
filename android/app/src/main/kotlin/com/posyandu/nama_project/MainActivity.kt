@@ -1,4 +1,4 @@
-package com.posyandu.nama_project
+package com.posyandu.posyandu
 
 import io.flutter.embedding.android.FlutterActivity
 
