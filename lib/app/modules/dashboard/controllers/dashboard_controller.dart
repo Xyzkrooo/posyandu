@@ -88,6 +88,17 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void> refreshArtikel() async {
+    await getArtikel();
+    Get.snackbar(
+      'Success',
+      'Artikel berhasil diperbarui',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
+
   Future<void> getDashboard() async {
     isLoadingDashboard.value = true;
     try {

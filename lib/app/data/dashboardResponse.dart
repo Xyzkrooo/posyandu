@@ -1,11 +1,22 @@
 class DashboardResponse {
+  List<RingkasanAnak>? ringkasanAnak;
   List<Notifikasi>? notifikasi;
   CountdownJadwal? countdownJadwal;
   List<Artikel>? artikel;
 
-  DashboardResponse({this.notifikasi, this.countdownJadwal, this.artikel});
+  DashboardResponse(
+      {this.ringkasanAnak,
+      this.notifikasi,
+      this.countdownJadwal,
+      this.artikel});
 
   DashboardResponse.fromJson(Map<String, dynamic> json) {
+    if (json['ringkasan_anak'] != null) {
+      ringkasanAnak = <RingkasanAnak>[];
+      json['ringkasan_anak'].forEach((v) {
+        ringkasanAnak!.add(new RingkasanAnak.fromJson(v));
+      });
+    }
     if (json['notifikasi'] != null) {
       notifikasi = <Notifikasi>[];
       json['notifikasi'].forEach((v) {
@@ -25,6 +36,10 @@ class DashboardResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.ringkasanAnak != null) {
+      data['ringkasan_anak'] =
+          this.ringkasanAnak!.map((v) => v.toJson()).toList();
+    }
     if (this.notifikasi != null) {
       data['notifikasi'] = this.notifikasi!.map((v) => v.toJson()).toList();
     }
@@ -34,6 +49,59 @@ class DashboardResponse {
     if (this.artikel != null) {
       data['artikel'] = this.artikel!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class RingkasanAnak {
+  int? idPemeriksaan;
+  String? namaAnak;
+  int? beratBadan;
+  int? tinggiBadan;
+  int? lingkarLengan;
+  int? lingkarKepala;
+  Null? asiBlnKe;
+  int? asiYaTdk;
+  String? tanggalPemeriksaan;
+  String? nama;
+
+  RingkasanAnak(
+      {this.idPemeriksaan,
+      this.namaAnak,
+      this.beratBadan,
+      this.tinggiBadan,
+      this.lingkarLengan,
+      this.lingkarKepala,
+      this.asiBlnKe,
+      this.asiYaTdk,
+      this.tanggalPemeriksaan,
+      this.nama});
+
+  RingkasanAnak.fromJson(Map<String, dynamic> json) {
+    idPemeriksaan = json['id_pemeriksaan'];
+    namaAnak = json['nama_anak'];
+    beratBadan = json['berat_badan'];
+    tinggiBadan = json['tinggi_badan'];
+    lingkarLengan = json['lingkar_lengan'];
+    lingkarKepala = json['lingkar_kepala'];
+    asiBlnKe = json['asi_bln_ke'];
+    asiYaTdk = json['asi_ya_tdk'];
+    tanggalPemeriksaan = json['tanggal_pemeriksaan'];
+    nama = json['nama'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_pemeriksaan'] = this.idPemeriksaan;
+    data['nama_anak'] = this.namaAnak;
+    data['berat_badan'] = this.beratBadan;
+    data['tinggi_badan'] = this.tinggiBadan;
+    data['lingkar_lengan'] = this.lingkarLengan;
+    data['lingkar_kepala'] = this.lingkarKepala;
+    data['asi_bln_ke'] = this.asiBlnKe;
+    data['asi_ya_tdk'] = this.asiYaTdk;
+    data['tanggal_pemeriksaan'] = this.tanggalPemeriksaan;
+    data['nama'] = this.nama;
     return data;
   }
 }
@@ -137,6 +205,7 @@ class Artikel {
   String? createdAt;
   String? updatedAt;
   Null? deletedAt;
+  String? ringkasan;
 
   Artikel(
       {this.idArtEdu,
@@ -150,7 +219,8 @@ class Artikel {
       this.idPetugas,
       this.createdAt,
       this.updatedAt,
-      this.deletedAt});
+      this.deletedAt,
+      this.ringkasan});
 
   Artikel.fromJson(Map<String, dynamic> json) {
     idArtEdu = json['id_art_edu'];
@@ -165,6 +235,7 @@ class Artikel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    ringkasan = json['ringkasan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -181,6 +252,7 @@ class Artikel {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['ringkasan'] = this.ringkasan;
     return data;
   }
 }

@@ -27,7 +27,11 @@ class DashboardView extends GetView<DashboardController> {
                   ),
                   title: const Text(
                     "POSYANDU",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
                   ),
                   actions: [
                     Obx(() {
@@ -38,9 +42,22 @@ class DashboardView extends GetView<DashboardController> {
                           : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user?.nama ?? 'User')}&background=random';
 
                       return PopupMenuButton<String>(
-                        icon: CircleAvatar(
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: NetworkImage(avatarUrl),
+                        offset: const Offset(0, 56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        icon: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.blue.shade300,
+                              width: 2,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[300],
+                            backgroundImage: NetworkImage(avatarUrl),
+                          ),
                         ),
                         onSelected: (value) {
                           if (value == 'profile') {
@@ -49,13 +66,32 @@ class DashboardView extends GetView<DashboardController> {
                             controller.logOut();
                           }
                         },
-                        itemBuilder: (context) => const [
+                        itemBuilder: (context) => [
                           PopupMenuItem(
-                              value: 'profile', child: Text('Profil')),
-                          PopupMenuItem(value: 'logout', child: Text('Logout')),
+                            value: 'profile',
+                            child: Row(
+                              children: [
+                                Icon(Icons.person, color: Colors.blue.shade700),
+                                const SizedBox(width: 12),
+                                const Text('Profil'),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuDivider(),
+                          PopupMenuItem(
+                            value: 'logout',
+                            child: Row(
+                              children: [
+                                Icon(Icons.logout, color: Colors.red.shade700),
+                                const SizedBox(width: 12),
+                                const Text('Logout'),
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     }),
+                    const SizedBox(width: 8),
                   ],
                 ),
               ),
@@ -70,52 +106,86 @@ class DashboardView extends GetView<DashboardController> {
               );
             },
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: controller.selectedIndex.value,
-            onTap: (index) {
-              controller.changeIndex(index);
-              Get.nestedKey(1)!.currentState!.pushReplacement(
-                    MaterialPageRoute(builder: (_) => controller.pages[index]),
-                  );
-            },
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            showSelectedLabels: true,
-            showUnselectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                icon: _navItem(Icons.home, 0, controller),
-                label: 'Beranda',
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  offset: const Offset(0, -3),
+                ),
+              ],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
               ),
-              BottomNavigationBarItem(
-                icon: _navItem(Icons.article, 1, controller),
-                label: 'Artikel',
-              ),
-              BottomNavigationBarItem(
-                icon: _navItem(Icons.help_outline, 2, controller),
-                label: 'FAQ',
-              ),
-              BottomNavigationBarItem(
-                icon: _navItem(Icons.support_agent, 3, controller),
-                label: 'CS',
-              ),
-            ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(Icons.home_rounded, 'Beranda', 0, controller),
+                _buildNavItem(Icons.article_rounded, 'Artikel', 1, controller),
+                _buildNavItem(Icons.help_outline_rounded, 'FAQ', 2, controller),
+                _buildNavItem(Icons.support_agent_rounded, 'CS', 3, controller),
+              ],
+            ),
           ),
         ));
   }
 
-  Widget _navItem(IconData icon, int index, DashboardController controller) {
+  Widget _buildNavItem(IconData icon, String label, int index, DashboardController controller) {
     final isSelected = controller.selectedIndex.value == index;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.shade50 : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Icon(
-        icon,
-        color: isSelected ? Colors.blue : Colors.grey,
+    
+    return GestureDetector(
+      onTap: () {
+        controller.changeIndex(index);
+        Get.nestedKey(1)!.currentState!.pushReplacement(
+          MaterialPageRoute(builder: (_) => controller.pages[index]),
+        );
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(
+          horizontal: isSelected ? 16 : 12, 
+          vertical: 8
+        ),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue.shade50 : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.2),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                  )
+                ]
+              : null,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.blue.shade700 : Colors.grey.shade600,
+              size: isSelected ? 26 : 22,
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.blue.shade700,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
