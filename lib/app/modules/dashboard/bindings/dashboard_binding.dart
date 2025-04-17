@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controllers/dashboard_controller.dart';
+import '../controllers/faq_controller.dart';
 
 class DashboardBinding extends Bindings {
   @override

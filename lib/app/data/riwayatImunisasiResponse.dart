@@ -35,7 +35,8 @@ class Data {
   String? nama;
 
   Data(
-      {this.idIv,
+      {
+      this.idIv,
       this.namaAnak,
       this.layanan,
       this.statusImunisasi,

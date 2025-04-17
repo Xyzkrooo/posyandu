@@ -127,9 +127,8 @@ class DashboardView extends GetView<DashboardController> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildNavItem(Icons.home_rounded, 'Beranda', 0, controller),
-                _buildNavItem(Icons.article_rounded, 'Artikel', 1, controller),
-                _buildNavItem(Icons.help_outline_rounded, 'FAQ', 2, controller),
-                _buildNavItem(Icons.support_agent_rounded, 'CS', 3, controller),
+                _buildNavItem(Icons.help_outline_rounded, 'FAQ', 1, controller),
+                _buildNavItem(Icons.support_agent_rounded, 'CS', 2, controller),
               ],
             ),
           ),

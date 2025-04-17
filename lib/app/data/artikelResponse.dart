@@ -1,78 +1,83 @@
 class ArtikelResponse {
   String? message;
-  List<Data>? data;
+  List<Artikel>? data;
 
   ArtikelResponse({this.message, this.data});
 
   ArtikelResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <Artikel>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Artikel.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> json = {};
+    json['message'] = message;
+    if (data != null) {
+      json['data'] = data!.map((v) => v.toJson()).toList();
     }
-    return data;
+    return json;
   }
 }
 
-class Data {
-  int? idArtEdu;
-  String? judulArtEdu;
+class Artikel {
+  int? id;
+  String? judul;
   String? slug;
-  String? kontenArtEdu;
+  String? konten;
   String? thumbnail;
-  int? artEduStat;
-  Null? catatan;
-  String? kategoriArtEdu;
+  int? status;
+  String? catatan;
+  String? kategori;
   String? createdAt;
-  String? namaPenulis;
+  String? penulis;
+  String? ringkasan;
 
-  Data(
-      {this.idArtEdu,
-      this.judulArtEdu,
-      this.slug,
-      this.kontenArtEdu,
-      this.thumbnail,
-      this.artEduStat,
-      this.catatan,
-      this.kategoriArtEdu,
-      this.createdAt,
-      this.namaPenulis});
+  Artikel({
+    this.id,
+    this.judul,
+    this.slug,
+    this.konten,
+    this.thumbnail,
+    this.status,
+    this.catatan,
+    this.kategori,
+    this.createdAt,
+    this.penulis,
+    this.ringkasan,
+  });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    idArtEdu = json['id_art_edu'];
-    judulArtEdu = json['judul_art_edu'];
+  Artikel.fromJson(Map<String, dynamic> json) {
+    id = json['id_art_edu'];
+    judul = json['judul_art_edu'];
     slug = json['slug'];
-    kontenArtEdu = json['konten_art_edu'];
+    konten = json['konten_art_edu'];
     thumbnail = json['thumbnail'];
-    artEduStat = json['art_edu_stat'];
+    status = json['art_edu_stat'];
     catatan = json['catatan'];
-    kategoriArtEdu = json['kategori_art_edu'];
+    kategori = json['kategori_art_edu'];
     createdAt = json['created_at'];
-    namaPenulis = json['nama_penulis'];
+    penulis = json['nama_penulis'];
+    ringkasan = json['ringkasan'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_art_edu'] = this.idArtEdu;
-    data['judul_art_edu'] = this.judulArtEdu;
-    data['slug'] = this.slug;
-    data['konten_art_edu'] = this.kontenArtEdu;
-    data['thumbnail'] = this.thumbnail;
-    data['art_edu_stat'] = this.artEduStat;
-    data['catatan'] = this.catatan;
-    data['kategori_art_edu'] = this.kategoriArtEdu;
-    data['created_at'] = this.createdAt;
-    data['nama_penulis'] = this.namaPenulis;
-    return data;
+    final Map<String, dynamic> json = {};
+    json['id_art_edu'] = id;
+    json['judul_art_edu'] = judul;
+    json['slug'] = slug;
+    json['konten_art_edu'] = konten;
+    json['thumbnail'] = thumbnail;
+    json['art_edu_stat'] = status;
+    json['catatan'] = catatan;
+    json['kategori_art_edu'] = kategori;
+    json['created_at'] = createdAt;
+    json['nama_penulis'] = penulis;
+    json['ringkasan'] = ringkasan;
+    return json;
   }
 }

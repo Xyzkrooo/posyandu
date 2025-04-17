@@ -334,7 +334,7 @@ class IndexView extends GetView<DashboardController> {
         'color': const Color(0xFF2196F3),
       },
       {
-        'title': 'Artikel\nKesehatan',
+        'title': 'Artikel\nEdukasi',
         'icon': FontAwesomeIcons.newspaper,
         'route': '/artikel',
         'color': const Color(0xFFFF9800),

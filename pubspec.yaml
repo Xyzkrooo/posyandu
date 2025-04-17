@@ -51,6 +51,8 @@ dependencies:
   intl: ^0.20.2
   flutter_staggered_animations: ^1.1.1
   flutter_html: ^3.0.0
+  share_plus: ^10.1.4
+  fl_chart: ^0.60.0
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +78,8 @@ flutter:
   assets:
     - assets/lottie/loading_med.json
     - assets/lottie/cs_help.json
+    - assets/lottie/question_mark.json
+    - assets/lottie/search_empty.json
     
 
   # To add assets to your application, add an assets section, like this:

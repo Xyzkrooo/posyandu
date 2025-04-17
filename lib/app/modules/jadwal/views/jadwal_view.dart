@@ -11,17 +11,18 @@ class JadwalView extends GetView<JadwalController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // Halodoc-inspired soft colors
     final primaryColor = Color(0xFF16A0B5);
     final secondaryColor = Color(0xFF41C2D3);
     final accentColor = Color(0xFF68D4E3);
     final backgroundColor = Color(0xFFF6FCFD);
     final cardColor = Color(0xFFE6F7FA);
-    
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Jadwal Posyandu", 
+        title: const Text(
+          "Jadwal Posyandu",
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: primaryColor,
@@ -44,8 +45,10 @@ class JadwalView extends GetView<JadwalController> {
               children: [
                 CircularProgressIndicator(color: primaryColor),
                 SizedBox(height: 16),
-                Text("Memuat jadwal...", 
-                  style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+                Text(
+                  "Memuat jadwal...",
+                  style: TextStyle(
+                      color: primaryColor, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -76,15 +79,16 @@ class JadwalView extends GetView<JadwalController> {
                 children: [
                   // Date display
                   Obx(() => Text(
-                    DateFormat('MMMM yyyy').format(controller.selectedDate.value),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )),
+                        DateFormat('MMMM yyyy')
+                            .format(controller.selectedDate.value),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      )),
                   SizedBox(height: 12),
-                  
+
                   // Filter buttons
                   Row(
                     children: [
@@ -96,7 +100,8 @@ class JadwalView extends GetView<JadwalController> {
                               firstDate: DateTime(2023),
                               lastDate: DateTime(2030),
                               initialDateRange: DateTimeRange(
-                                start: DateTime.now().subtract(const Duration(days: 7)),
+                                start: DateTime.now()
+                                    .subtract(const Duration(days: 7)),
                                 end: DateTime.now(),
                               ),
                               builder: (context, child) {
@@ -114,7 +119,8 @@ class JadwalView extends GetView<JadwalController> {
                               },
                             );
                             if (picked != null) {
-                              controller.filterByDateRange(picked.start, picked.end);
+                              controller.filterByDateRange(
+                                  picked.start, picked.end);
                             }
                           },
                           icon: const Icon(Icons.filter_alt, size: 18),
@@ -212,7 +218,8 @@ class JadwalView extends GetView<JadwalController> {
                       fontWeight: FontWeight.bold,
                     ),
                     weekendTextStyle: TextStyle(color: Colors.redAccent),
-                    outsideTextStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                    outsideTextStyle:
+                        TextStyle(color: Colors.grey.withOpacity(0.5)),
                     markersMaxCount: 3,
                     markerDecoration: BoxDecoration(
                       color: secondaryColor,
@@ -224,7 +231,7 @@ class JadwalView extends GetView<JadwalController> {
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, day, events) {
                       if (events.isEmpty) return SizedBox();
-                      
+
                       return Positioned(
                         bottom: 1,
                         child: Container(
@@ -239,14 +246,15 @@ class JadwalView extends GetView<JadwalController> {
                     },
                     dowBuilder: (context, day) {
                       final text = DateFormat.E().format(day);
-                      
+
                       return Center(
                         child: Text(
                           text,
                           style: TextStyle(
-                            color: [DateTime.saturday, DateTime.sunday].contains(day.weekday) 
-                              ? Colors.redAccent 
-                              : primaryColor,
+                            color: [DateTime.saturday, DateTime.sunday]
+                                    .contains(day.weekday)
+                                ? Colors.redAccent
+                                : primaryColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -274,18 +282,19 @@ class JadwalView extends GetView<JadwalController> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Obx(() => Text(
-                      "Kegiatan ${DateFormat('d MMMM yyyy').format(controller.selectedDate.value)}",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
-                    )),
+                          "Kegiatan ${DateFormat('d MMMM yyyy').format(controller.selectedDate.value)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        )),
                   ),
                   Spacer(),
                   if (controller.filteredList.isNotEmpty)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.orange.shade100,
                         borderRadius: BorderRadius.circular(20),
@@ -315,12 +324,10 @@ class JadwalView extends GetView<JadwalController> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/images/empty_calendar.png', // Add this image to your assets
-                        height: 120,
-                        // If you don't have this image, use an icon instead:
-                        // Icon(Icons.event_busy, size: 100, color: Colors.grey.shade300),
-                      ),
+                      // If you don't have this image, use an icon instead:
+                      Icon(Icons.event_busy,
+                          size: 100, color: Colors.grey.shade300),
+
                       const SizedBox(height: 16),
                       Text(
                         controller.filteredList.isNotEmpty
@@ -377,7 +384,7 @@ class JadwalView extends GetView<JadwalController> {
       ),
     );
   }
-  
+
   Widget _buildJadwalCard(dynamic item, Color primaryColor, Color cardColor) {
     return Card(
       color: cardColor,
@@ -420,7 +427,7 @@ class JadwalView extends GetView<JadwalController> {
                 ],
               ),
             ),
-            
+
             // Content
             Padding(
               padding: const EdgeInsets.all(16),
@@ -469,7 +476,7 @@ class JadwalView extends GetView<JadwalController> {
       ),
     );
   }
-  
+
   Widget _buildInfoItem({
     required IconData icon,
     required String label,

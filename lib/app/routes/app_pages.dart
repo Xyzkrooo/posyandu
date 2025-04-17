@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/anak/bindings/anak_binding.dart';
 import '../modules/anak/views/anak_view.dart';
+import '../modules/artikel/bindings/artikel_binding.dart';
+import '../modules/artikel/views/artikel_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -18,6 +20,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/riwayat_pemeriksaan/bindings/riwayat_pemeriksaan_binding.dart';
 import '../modules/riwayat_pemeriksaan/views/riwayat_pemeriksaan_view.dart';
+import '../modules/tumbuh_kembang/bindings/tumbuh_kembang_binding.dart';
+import '../modules/tumbuh_kembang/views/tumbuh_kembang_view.dart';
 
 part 'app_routes.dart';
 
@@ -71,6 +75,16 @@ class AppPages {
       name: _Paths.LAYANAN,
       page: () => const LayananView(),
       binding: LayananBinding(),
+    ),
+    GetPage(
+      name: _Paths.ARTIKEL,
+      page: () => const ArtikelView(),
+      binding: ArtikelBinding(),
+    ),
+    GetPage(
+      name: _Paths.TUMBUH_KEMBANG,
+      page: () => const TumbuhKembangView(),
+      binding: TumbuhKembangBinding(),
     ),
   ];
 }

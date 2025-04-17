@@ -10,6 +10,7 @@ class BaseUrl {
   static String layanan = 'http://project-ujikom.test/api/layanan';
   static String riwayatPemeriksaan = 'http://project-ujikom.test/api/riwayat-pemeriksaan';
   static String riwayatImunisasi = 'http://project-ujikom.test/api/riwayat-imunisasi';
+  static String tumbuhKembang = 'http://project-ujikom.test/api/tumbuh-kembang';
 
   static String imageUrl = 'http://project-ujikom.test/storage';
 }

@@ -12,6 +12,8 @@ abstract class Routes {
   static const IMUNISASI = _Paths.IMUNISASI;
   static const ANAK = _Paths.ANAK;
   static const LAYANAN = _Paths.LAYANAN;
+  static const ARTIKEL = _Paths.ARTIKEL;
+  static const TUMBUH_KEMBANG = _Paths.TUMBUH_KEMBANG;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const IMUNISASI = '/imunisasi';
   static const ANAK = '/data-anak';
   static const LAYANAN = '/layanan';
+  static const ARTIKEL = '/artikel';
+  static const TUMBUH_KEMBANG = '/tumbuh-kembang';
 }

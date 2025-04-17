@@ -6,10 +6,11 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../controllers/dashboard_controller.dart';
+
+import '../controllers/artikel_controller.dart';
 import 'detail_artikel_view.dart';
 
-class ArtikelView extends GetView<DashboardController> {
+class ArtikelView extends GetView<ArtikelController> {
   const ArtikelView({super.key});
 
   @override
@@ -66,11 +67,10 @@ class ArtikelView extends GetView<DashboardController> {
                   verticalOffset: 50.0,
                   child: FadeInAnimation(
                     child: Hero(
-                      tag: 'artikel_${artikel.idArtEdu}',
+                      tag: 'artikel_${artikel.id}',
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(
-                            () => ArtikelDetailView(artikel: artikel),
+                            Get.to(() => ArtikelDetailView(slug: artikel.slug!),
                             transition: Transition.fadeIn,
                           );
                         },
@@ -140,7 +140,7 @@ class ArtikelView extends GetView<DashboardController> {
                                           borderRadius: BorderRadius.circular(20),
                                         ),
                                         child: Text(
-                                          artikel.kategoriArtEdu ?? 'Umum',
+                                          artikel.kategori ?? 'Umum',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -160,7 +160,7 @@ class ArtikelView extends GetView<DashboardController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      artikel.judulArtEdu ?? "-",
+                                      artikel.judul ?? "-",
                                       style: const TextStyle(
                                         fontSize: 18, 
                                         fontWeight: FontWeight.bold,
@@ -181,7 +181,7 @@ class ArtikelView extends GetView<DashboardController> {
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
-                                          artikel.namaPenulis ?? 'Admin',
+                                          artikel.penulis ?? 'Admin',
                                           style: TextStyle(
                                             color: Colors.grey[700],
                                             fontSize: 13,
@@ -207,7 +207,7 @@ class ArtikelView extends GetView<DashboardController> {
                                     
                                     // Ringkasan konten
                                     Text(
-                                      controller.getRingkasan(artikel.kontenArtEdu ?? ""),
+                                      controller.getRingkasan(artikel.konten ?? ""),
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey[800],

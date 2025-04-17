@@ -8,10 +8,13 @@ import '../../../data/layananResponse.dart' as layanan;
 import '../../../data/layananResponse.dart';
 import '../../../utils/api.dart';
 
-
 class LayananController extends GetxController {
   var layananList = <layanan.Data>[].obs;
   var isLoading = true.obs;
+
+  var layananDetail = Rxn<layanan.Data>();
+  var isLoadingDetail = true.obs;
+
   final storage = GetStorage();
   late final RxnString token;
 
@@ -57,6 +60,30 @@ class LayananController extends GetxController {
       Get.snackbar("Error", "Terjadi kesalahan: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> getLayananDetail(String slug) async {
+    isLoadingDetail.value = true;
+    try {
+      final response = await http.get(
+        Uri.parse('${BaseUrl.layanan}/$slug'),
+        headers: {
+          'Authorization': 'Bearer ${token.value}',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        layananDetail.value = layanan.Data.fromJson(jsonData['data']);
+      } else {
+        Get.snackbar('Error', 'layanan tidak ditemukan');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Terjadi kesalahan saat mengambil layanan: $e');
+    } finally {
+      isLoadingDetail.value = false;
     }
   }
 }
