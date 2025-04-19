@@ -12,10 +12,10 @@ class FAQView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FBFF), // Softer background color
+      backgroundColor: const Color(0xFFF8FBFF), // Keeping the soft background
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFF3A9EC1), // Softer blue like Halodoc
+        backgroundColor: const Color(0xFF0F66CD), // Changed to match Index primary blue
         title: Obx(() => controller.isSearching.value
             ? _buildSearchField()
             : const Text(
@@ -91,7 +91,7 @@ class FAQView extends GetView<DashboardController> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
         decoration: const BoxDecoration(
-          color: Color(0xFF3A9EC1), // Softer blue like Halodoc
+          color: Color(0xFF0F66CD), // Changed to match Index primary blue
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
@@ -168,11 +168,11 @@ class FAQView extends GetView<DashboardController> {
                 selected: isSelected,
                 label: Text(category),
                 onSelected: (_) => controller.setCategory(category),
-                backgroundColor: const Color(0xFFECF5FD), // Soft blue background
-                selectedColor: const Color(0xFFBFE1F3), // Soft selected color
-                checkmarkColor: const Color(0xFF1E88E5), // Checkmark color
+                backgroundColor: const Color(0xFFE3F2FD), // Aligned with Index blue theme
+                selectedColor: const Color(0xFFBBDEFB), // Lighter variant for selected state
+                checkmarkColor: const Color(0xFF0F66CD), // Main blue from Index
                 labelStyle: TextStyle(
-                  color: isSelected ? const Color(0xFF1E88E5) : const Color(0xFF5C5C5C),
+                  color: isSelected ? const Color(0xFF0F66CD) : const Color(0xFF5C5C5C),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   fontSize: 13,
                 ),
@@ -207,7 +207,7 @@ class FAQView extends GetView<DashboardController> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF3A9EC1),
+              color: Color(0xFF0F66CD), // Changed to match Index primary blue
             ),
           ),
           const SizedBox(height: 8),
@@ -224,17 +224,17 @@ class FAQView extends GetView<DashboardController> {
   }
   
   Widget _buildFaqItem(Map<String, String> faq, int index) {
-    // Use softer colors for categories
+    // Updated with colors matching the Index view
     Map<String, Color> categoryColors = {
-      "Umum": const Color(0xFF3A9EC1), // Blue
-      "Pembayaran": const Color(0xFF66BB6A), // Soft green
-      "Akun": const Color(0xFF5C6BC0), // Soft indigo
-      "Pengiriman": const Color(0xFFEF5350), // Soft red
-      "Produk": const Color(0xFFFFB74D), // Soft orange
-      "Lainnya": const Color(0xFF9575CD), // Soft purple
+      "Umum": const Color(0xFF0F66CD), // Main blue from Index
+      "Pembayaran": const Color(0xFF4CAF50), // Green from Index
+      "Akun": const Color(0xFF2196F3), // Blue from Index
+      "Pengiriman": const Color(0xFFF44336), // Red from Index
+      "Produk": const Color(0xFFFF9800), // Orange from Index
+      "Lainnya": const Color(0xFF9C27B0), // Purple from Index
     };
     
-    final Color categoryColor = categoryColors[faq["category"]] ?? const Color(0xFF3A9EC1);
+    final Color categoryColor = categoryColors[faq["category"]] ?? const Color(0xFF0F66CD);
     
     return Obx(() => Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -403,7 +403,7 @@ class FAQView extends GetView<DashboardController> {
         Get.dialog(
           AlertDialog(
             title: const Text('Laporkan Masalah', 
-              style: TextStyle(color: Color(0xFF3A9EC1)),
+              style: TextStyle(color: Color(0xFF0F66CD)), // Changed to match Index primary blue
             ),
             content: const Text(
                 'Apakah informasi pada jawaban ini tidak akurat atau sulit dipahami?'),
@@ -421,14 +421,14 @@ class FAQView extends GetView<DashboardController> {
                     'Laporan Diterima',
                     'Laporan Anda telah diterima. Terima kasih!',
                     snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: const Color(0xFF3A9EC1),
+                    backgroundColor: const Color(0xFF0F66CD), // Changed to match Index primary blue
                     colorText: Colors.white,
                     margin: const EdgeInsets.all(16),
                     borderRadius: 8,
                   );
                 },
                 child: const Text('Laporkan', 
-                  style: TextStyle(color: Color(0xFF3A9EC1)),
+                  style: TextStyle(color: Color(0xFF0F66CD)), // Changed to match Index primary blue
                 ),
               ),
             ],

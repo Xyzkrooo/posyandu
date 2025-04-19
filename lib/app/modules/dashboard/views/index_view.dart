@@ -100,41 +100,7 @@ class IndexView extends GetView<DashboardController> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 0,
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  FontAwesomeIcons.magnifyingGlass,
-                  color: Color(0xFF0F66CD),
-                  size: 18,
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Text(
-                    "Cari informasi kesehatan...",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Search bar removed as requested
         ],
       ),
     );
@@ -583,9 +549,9 @@ class IndexView extends GetView<DashboardController> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF0F66CD),
-                        borderRadius: const BorderRadius.only(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF0F66CD),
+                        borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16),
                         ),

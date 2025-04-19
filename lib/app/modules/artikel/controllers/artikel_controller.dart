@@ -24,7 +24,6 @@ class ArtikelController extends GetxController {
   final token = RxnString();
 
   @override
-  @override
   void onInit() {
     token.value = storage.read('token');
 
@@ -110,25 +109,32 @@ class ArtikelController extends GetxController {
   }
 
   Future<void> getRelatedArtikel(String kategori, int exceptId) async {
-    try {
-      final response = await http.get(
-        Uri.parse('${BaseUrl.artikel}/related/$kategori/$exceptId'),
-        headers: {
-          'Authorization': 'Bearer ${token.value}',
-          'Accept': 'application/json',
-        },
-      );
+  isLoadingRelated.value = true; // <--- Tambahkan ini di awal
 
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        relatedArtikelList.value = List<artikel.Artikel>.from(
-          jsonData['data'].map((x) => artikel.Artikel.fromJson(x)),
-        );
-      }
-    } catch (e) {
-      print("Error related: $e");
+  try {
+    final response = await http.get(
+      Uri.parse('${BaseUrl.artikel}/related/$kategori/$exceptId'),
+      headers: {
+        'Authorization': 'Bearer ${token.value}',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      relatedArtikelList.value = List<artikel.Artikel>.from(
+        jsonData['data'].map((x) => artikel.Artikel.fromJson(x)),
+      );
+    } else {
+      Get.snackbar('Error', 'Artikel tidak ditemukan');
     }
+    
+  } catch (e) {
+    Get.snackbar('Error', 'Terjadi kesalahan saat mengambil artikel: $e');
+  } finally {
+    isLoadingRelated.value = false; 
   }
+}
 
   String getRingkasan(String htmlString, {int maxLength = 100}) {
     final document = HtmlParser.parse(htmlString);

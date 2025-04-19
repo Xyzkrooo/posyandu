@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:shimmer/shimmer.dart';
 import '../controllers/jadwal_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -12,12 +13,12 @@ class JadwalView extends GetView<JadwalController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Halodoc-inspired soft colors
-    final primaryColor = Color(0xFF16A0B5);
-    final secondaryColor = Color(0xFF41C2D3);
-    final accentColor = Color(0xFF68D4E3);
-    final backgroundColor = Color(0xFFF6FCFD);
-    final cardColor = Color(0xFFE6F7FA);
+    // Updated primary color to 0xFF0F66CD
+    final primaryColor = Color(0xFF0F66CD);
+    final secondaryColor = Color(0xFF4485D9);
+    final accentColor = Color(0xFF68A9F0);
+    final backgroundColor = Color(0xFFF6FAFF);
+    final cardColor = Color(0xFFE6F0FA);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,20 +40,7 @@ class JadwalView extends GetView<JadwalController> {
       backgroundColor: backgroundColor,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: primaryColor),
-                SizedBox(height: 16),
-                Text(
-                  "Memuat jadwal...",
-                  style: TextStyle(
-                      color: primaryColor, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          );
+          return _buildShimmerLoading(primaryColor);
         }
 
         return Column(
@@ -324,7 +312,6 @@ class JadwalView extends GetView<JadwalController> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // If you don't have this image, use an icon instead:
                       Icon(Icons.event_busy,
                           size: 100, color: Colors.grey.shade300),
 
@@ -385,6 +372,89 @@ class JadwalView extends GetView<JadwalController> {
     );
   }
 
+  // New shimmer loading effect
+  Widget _buildShimmerLoading(Color primaryColor) {
+    return Column(
+      children: [
+        // Shimmer header
+        Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+          ),
+        ),
+        
+        // Shimmer calendar
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ),
+        
+        // Shimmer date indicator
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 30,
+              width: 180,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ),
+        
+        // Shimmer jadwal list
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Container(
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildJadwalCard(dynamic item, Color primaryColor, Color cardColor) {
     return Card(
       color: cardColor,
@@ -396,7 +466,7 @@ class JadwalView extends GetView<JadwalController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.teal.shade100),
+          border: Border.all(color: Colors.blue.shade100),  // Changed from teal to blue to match new color theme
         ),
         child: Column(
           children: [

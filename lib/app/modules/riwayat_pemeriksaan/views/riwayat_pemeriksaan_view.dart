@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import '../controllers/riwayat_pemeriksaan_controller.dart';
+
+// Define primary color as constant
+const Color primaryColor = Color(0xFF0F66CD);
 
 class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
   const RiwayatPemeriksaanView({super.key});
@@ -11,14 +15,12 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Riwayat Pemeriksaan'),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: primaryColor,
         elevation: 0,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.blue),
-          );
+          return _buildShimmerLoading();
         }
 
         if (controller.namaAnakList.isEmpty) {
@@ -76,8 +78,8 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                         gradient: isSelected
                             ? LinearGradient(
                                 colors: [
-                                  Colors.blue.shade500,
-                                  Colors.blue.shade700
+                                  primaryColor.withOpacity(0.8),
+                                  primaryColor
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -88,7 +90,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                         boxShadow: isSelected
                             ? [
                                 BoxShadow(
-                                  color: Colors.blue.withOpacity(0.3),
+                                  color: primaryColor.withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 3),
                                 )
@@ -114,14 +116,14 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
               child: Row(
                 children: [
                   Icon(Icons.article_outlined,
-                      color: Colors.blue.shade700, size: 20),
+                      color: primaryColor, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     "Riwayat Pemeriksaan",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900),
+                        color: primaryColor.withBlue(220)),
                   ),
                   const Spacer(),
                   Text(
@@ -190,7 +192,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue.shade50,
+                                    color: primaryColor.withOpacity(0.1),
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(16),
                                       topRight: Radius.circular(16),
@@ -201,11 +203,11 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                       Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: Colors.blue.shade100,
+                                          color: primaryColor.withOpacity(0.2),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(Icons.calendar_month,
-                                            color: Colors.blue.shade700),
+                                            color: primaryColor),
                                       ),
                                       const SizedBox(width: 12),
                                       Text(
@@ -290,7 +292,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                               "Lingkar Kepala",
                                               "${item.lingkarKepala} cm",
                                               Icons.circle,
-                                              Colors.blue.shade700,
+                                              primaryColor,
                                               null,
                                             ),
                                           ),
@@ -338,6 +340,104 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
           ],
         );
       }),
+    );
+  }
+
+  // Shimmer loading UI
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Shimmer for "Pilih Anak" text
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 16, bottom: 8),
+              child: Container(
+                width: 100,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            
+            // Shimmer for horizontal list
+            SizedBox(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: 4, // Simulate 4 items
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  );
+                },
+              ),
+            ),
+            
+            // Shimmer for header
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 150,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    width: 60,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Shimmer for cards
+            for (int i = 0; i < 3; i++)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  height: 240,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 

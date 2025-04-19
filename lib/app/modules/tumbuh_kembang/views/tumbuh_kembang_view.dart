@@ -1,18 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../data/tumbuhKembangResponse.dart';
 import '../controllers/tumbuh_kembang_controller.dart';
 
 class TumbuhKembangView extends GetView<TumbuhKembangController> {
   const TumbuhKembangView({super.key});
 
-  // Halodoc theme colors
-  static const Color primaryColor = Color(0xFF02B4B8); // Halodoc teal
-  static const Color secondaryColor = Color(0xFF3A5998); // Halodoc blue
-  static const Color accentColor = Color(0xFFFFA500); // Orange for accents
-  static const Color backgroundColor = Color(0xFFF5F8FA); // Light background
-  static const Color textColor = Color(0xFF2D3748); // Dark text
+  // Updated color theme
+  static const Color primaryColor = Color(0xFF0F66CD); // Changed to the requested color
+  static const Color secondaryColor = Color(0xFF3A5998);
+  static const Color accentColor = Color(0xFFFFA500);
+  static const Color backgroundColor = Color(0xFFF5F8FA);
+  static const Color textColor = Color(0xFF2D3748);
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +21,7 @@ class TumbuhKembangView extends GetView<TumbuhKembangController> {
       if (controller.isLoading.value) {
         return Scaffold(
           backgroundColor: backgroundColor,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: primaryColor),
-                const SizedBox(height: 16),
-                Text(
-                  "Memuat data...",
-                  style: TextStyle(
-                    color: textColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          body: _buildShimmerLoading(),
         );
       }
 
@@ -142,6 +128,72 @@ class TumbuhKembangView extends GetView<TumbuhKembangController> {
         ),
       );
     });
+  }
+
+  // Shimmer loading effect
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 60), // Space for appbar
+            // Shimmer for summary card
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Shimmer for title
+            Container(
+              height: 24,
+              width: 180,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Shimmer for chart
+            Container(
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Shimmer for history title
+            Container(
+              height: 24,
+              width: 220,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Shimmer for table
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
   
   Widget _buildContentView(Data anakData, List<Riwayat> riwayat) {
@@ -380,7 +432,7 @@ class TumbuhKembangView extends GetView<TumbuhKembangController> {
                   minY: 0,
                   lineTouchData: LineTouchData(
                     touchTooltipData: LineTouchTooltipData(
-                      tooltipBgColor: Colors.white.withOpacity(0.8),
+                      getTooltipColor: (spot) => Colors.white.withOpacity(0.8),
                       tooltipRoundedRadius: 8,
                       getTooltipItems: (List<LineBarSpot> touchedSpots) {
                         return touchedSpots.map((spot) {

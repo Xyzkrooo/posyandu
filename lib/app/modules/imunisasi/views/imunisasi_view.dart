@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/imunisasi_controller.dart';
 
@@ -19,22 +20,26 @@ class ImunisasiView extends GetView<ImunisasiController> {
       if (controller.isLoading.value) {
         return Scaffold(
           backgroundColor: bgColor,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: primaryColor),
-                const SizedBox(height: 16),
-                Text(
-                  "Memuat data imunisasi...",
-                  style: TextStyle(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+            title: const Text(
+              "Riwayat Imunisasi",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: Container(
+                color: primaryColor,
+                child: _buildShimmerTabs(),
+              ),
             ),
           ),
+          body: _buildShimmerBody(),
         );
       }
 
@@ -573,11 +578,208 @@ class ImunisasiView extends GetView<ImunisasiController> {
     });
   }
 
+  // Shimmer for tabs
+  Widget _buildShimmerTabs() {
+    return Shimmer.fromColors(
+      baseColor: Colors.white.withOpacity(0.4),
+      highlightColor: Colors.white.withOpacity(0.8),
+      child: TabBar(
+        isScrollable: true,
+        tabs: List.generate(
+          2,
+          (index) => Tab(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 80,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Shimmer for main body
+  Widget _buildShimmerBody() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Summary Card Shimmer
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                height: 80,
+                width: double.infinity,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          
+          // Timeline items Shimmer
+          ...List.generate(
+            3,
+            (index) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildShimmerTimelineItem(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Shimmer for timeline item
+  Widget _buildShimmerTimelineItem() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Circle and line
+          Column(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Container(
+                width: 2,
+                height: 70,
+                color: Colors.white,
+              ),
+            ],
+          ),
+          const SizedBox(width: 16),
+          
+          // Content Card
+          Expanded(
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: Colors.grey[200]!,
+                  width: 1,
+                ),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          width: 100,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          width: 150,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   String _formatTanggal(String? tanggal) {
     if (tanggal == null) return "-";
     try {
       final parsed = DateTime.parse(tanggal);
-      return DateFormat("dd MMM yyyy", "id_ID").format(parsed);
+      return DateFormat("dd MMM yyyy").format(parsed);
     } catch (_) {
       return tanggal;
     }

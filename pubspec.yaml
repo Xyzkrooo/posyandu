@@ -40,7 +40,7 @@ dependencies:
   dio: ^5.4.0
   table_calendar: ^3.2.0
   http: ^1.3.0
-  animate_do: ^2.1.0
+  animate_do: ^4.2.0
   url_launcher: ^6.2.5
   font_awesome_flutter: ^10.6.0
   carousel_slider: ^5.0.0
@@ -52,7 +52,8 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   flutter_html: ^3.0.0
   share_plus: ^10.1.4
-  fl_chart: ^0.60.0
+  fl_chart: ^0.71.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,7 @@ flutter:
     - assets/lottie/cs_help.json
     - assets/lottie/question_mark.json
     - assets/lottie/search_empty.json
+    - assets/logo_posyandu.jpeg
     
 
   # To add assets to your application, add an assets section, like this:

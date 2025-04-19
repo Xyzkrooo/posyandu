@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import '../controllers/anak_controller.dart';
 import 'package:flutter/services.dart';
 
@@ -8,10 +9,10 @@ class AnakView extends GetView<AnakController> {
   
   @override
   Widget build(BuildContext context) {
-    // Child-friendly color scheme
-    final primaryColor = Color(0xFF2196F3);
-    final secondaryColor = Color(0xFF64B5F6);
-    final accentColor = Color(0xFFBBDEFB);
+    // Updated color scheme with primary color 0xFF2D7D9A
+    final primaryColor = Color(0xFF2D7D9A);
+    final secondaryColor = Color(0xFF5AAFCA);
+    final accentColor = Color(0xFFB5E1EE);
     final backgroundColor = Color(0xFFF5F9FF);
     final girlColor = Color(0xFFF48FB1);
     final boyColor = Color(0xFF81D4FA);
@@ -40,22 +41,7 @@ class AnakView extends GetView<AnakController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: primaryColor),
-                SizedBox(height: 16),
-                Text(
-                  "Memuat data anak...",
-                  style: TextStyle(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          );
+          return _buildShimmerLoading(primaryColor);
         }
 
         if (controller.anakList.isEmpty) {
@@ -79,7 +65,7 @@ class AnakView extends GetView<AnakController> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Silakan tambahkan data anak terlebih dahulu",
+                  "Silakan hubungi admin untuk menambahkan data anak",
                   style: TextStyle(
                     color: Colors.grey.shade600,
                   ),
@@ -422,20 +408,125 @@ class AnakView extends GetView<AnakController> {
           ),
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement add child functionality
-          Get.snackbar(
-            'Info',
-            'Fitur tambah anak belum tersedia',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: primaryColor,
-            colorText: Colors.white,
-          );
-        },
-        backgroundColor: primaryColor,
-        child: Icon(Icons.person_add),
-        tooltip: 'Tambah Anak',
+      // Floating action button has been removed as requested
+    );
+  }
+  
+  // Shimmer loading widget
+  Widget _buildShimmerLoading(Color primaryColor) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Decorative wave header
+          Container(
+            height: 30,
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+          ),
+          
+          // Tab indicator/header shimmer
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: 100,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          
+          // Tab bar shimmer
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 12),
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          
+          SizedBox(height: 24),
+          
+          // Profile card shimmer
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+          
+          SizedBox(height: 16),
+          
+          // Growth card shimmer
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: 220,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+          
+          SizedBox(height: 16),
+          
+          // Button shimmer
+          Center(
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: 160,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -12,5 +12,8 @@ class BaseUrl {
   static String riwayatImunisasi = 'http://project-ujikom.test/api/riwayat-imunisasi';
   static String tumbuhKembang = 'http://project-ujikom.test/api/tumbuh-kembang';
 
+  static String updateProfile = 'http://project-ujikom.test/api/profile/update';
+  static String changePassword = 'http://project-ujikom.test/api/profile/update-password';
+
   static String imageUrl = 'http://project-ujikom.test/storage';
 }
