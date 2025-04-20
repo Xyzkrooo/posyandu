@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/layanan_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LayananView extends GetView<LayananController> {
@@ -12,7 +13,7 @@ class LayananView extends GetView<LayananController> {
   Widget build(BuildContext context) {
     // Initialize search functionality
     controller.initSearch();
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FBFF),
       body: NestedScrollView(
@@ -125,10 +126,9 @@ class LayananView extends GetView<LayananController> {
         },
         body: Column(
           children: [
-            Obx(() => controller.isLoading.value 
-              ? _buildShimmerSearchBar() 
-              : _buildSearchSection()
-            ),
+            Obx(() => controller.isLoading.value
+                ? _buildShimmerSearchBar()
+                : _buildSearchSection()),
             const SizedBox(height: 8),
             Expanded(
               child: _buildLayananListView(),
@@ -179,35 +179,37 @@ class LayananView extends GetView<LayananController> {
         ],
       ),
       child: Obx(() => TextField(
-        controller: controller.searchController,
-        onChanged: (value) {
-          controller.searchLayanan(value);
-        },
-        decoration: InputDecoration(
-          hintText: 'Cari layanan kesehatan...',
-          hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-          prefixIcon: Icon(Icons.search, color: const Color(0xFF0F66CD).withOpacity(0.7)),
-          suffixIcon: controller.searchText.value.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear, color: Colors.grey),
-                  onPressed: () {
-                    controller.clearSearch();
-                  },
-                )
-              : const SizedBox.shrink(),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: const Color(0xFF0F66CD).withOpacity(0.3)),
-          ),
-        ),
-      )),
+            controller: controller.searchController,
+            onChanged: (value) {
+              controller.searchLayanan(value);
+            },
+            decoration: InputDecoration(
+              hintText: 'Cari layanan kesehatan...',
+              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+              prefixIcon: Icon(Icons.search,
+                  color: const Color(0xFF0F66CD).withOpacity(0.7)),
+              suffixIcon: controller.searchText.value.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, color: Colors.grey),
+                      onPressed: () {
+                        controller.clearSearch();
+                      },
+                    )
+                  : const SizedBox.shrink(),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide:
+                    BorderSide(color: const Color(0xFF0F66CD).withOpacity(0.3)),
+              ),
+            ),
+          )),
     );
   }
 
@@ -239,7 +241,7 @@ class LayananView extends GetView<LayananController> {
   Widget _buildLayananCard(dynamic layanan, BuildContext context, int index) {
     // Define animation delay based on index
     final animationDelay = Duration(milliseconds: 100 * index);
-    
+
     // Define card gradients
     final List<List<Color>> cardGradients = [
       [const Color(0xFF2D7D9A), const Color(0xFF3A9EC1)],
@@ -248,10 +250,10 @@ class LayananView extends GetView<LayananController> {
       [const Color(0xFF7C65E6), const Color(0xFF6B56CC)],
       [const Color(0xFFFF7676), const Color(0xFFE06767)],
     ];
-    
+
     final int gradientIndex = index % cardGradients.length;
     final List<Color> gradient = cardGradients[gradientIndex];
-    
+
     final Map<String, IconData> categoryIcons = {
       'Balita': Icons.child_care,
       'Ibu Hamil': Icons.pregnant_woman,
@@ -260,10 +262,10 @@ class LayananView extends GetView<LayananController> {
       'Konsultasi': Icons.question_answer,
       'Lainnya': Icons.more_horiz,
     };
-    
+
     final String category = layanan.jenisLyn ?? 'Lainnya';
     final IconData icon = categoryIcons[category] ?? Icons.local_hospital;
-    
+
     // Age range text
     String ageRangeText = '';
     if (layanan.usiaMinimal != null && layanan.usiaMaksimal != null) {
@@ -273,7 +275,7 @@ class LayananView extends GetView<LayananController> {
     } else if (layanan.usiaMaksimal != null) {
       ageRangeText = '< ${layanan.usiaMaksimal} bukan';
     }
-    
+
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0.0, end: 1.0),
       duration: const Duration(milliseconds: 500),
@@ -328,12 +330,15 @@ class LayananView extends GetView<LayananController> {
                             colors: gradient,
                           ),
                         ),
-                        child: layanan.gambarLyn != null && layanan.gambarLyn!.isNotEmpty
+                        child: layanan.gambarLyn != null &&
+                                layanan.gambarLyn!.isNotEmpty
                             ? CachedNetworkImage(
                                 imageUrl: layanan.gambarLyn!,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => _buildImagePlaceholder(),
-                                errorWidget: (context, url, error) => _buildImageError(icon),
+                                placeholder: (context, url) =>
+                                    _buildImagePlaceholder(),
+                                errorWidget: (context, url, error) =>
+                                    _buildImageError(icon),
                               )
                             : _buildImageError(icon),
                       ),
@@ -358,7 +363,8 @@ class LayananView extends GetView<LayananController> {
                         top: 16,
                         left: 16,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(30),
@@ -421,15 +427,18 @@ class LayananView extends GetView<LayananController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          layanan.keteranganSingkat ?? '-',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[700],
-                            height: 1.4,
-                          ),
+                        // Replace Text widget with Html widget
+                        Html(
+                          data: layanan.keteranganSingkat ?? '-',
+                          style: {
+                            "body": Style(
+                              fontSize: FontSize(14),
+                              color: Colors.grey[700],
+                              lineHeight: LineHeight.percent(140),
+                              maxLines: 2,
+                              textOverflow: TextOverflow.ellipsis,
+                            ),
+                          },
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -437,7 +446,8 @@ class LayananView extends GetView<LayananController> {
                             // Age range badge if available
                             if (ageRangeText.isNotEmpty) ...[
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFECF5FD),
                                   borderRadius: BorderRadius.circular(30),
@@ -465,10 +475,11 @@ class LayananView extends GetView<LayananController> {
                               const Spacer(),
                             ] else
                               const Spacer(),
-                            
+
                             // View details button
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: gradient,
@@ -565,7 +576,7 @@ class LayananView extends GetView<LayananController> {
                     ),
                   ),
                 ),
-                
+
                 // Content area
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -582,7 +593,7 @@ class LayananView extends GetView<LayananController> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      
+
                       // Description placeholder - 2 lines
                       Container(
                         height: 14,
@@ -602,7 +613,7 @@ class LayananView extends GetView<LayananController> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Action area
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -616,7 +627,7 @@ class LayananView extends GetView<LayananController> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                           ),
-                          
+
                           // Button placeholder
                           Container(
                             height: 32,
@@ -728,7 +739,7 @@ class LayananView extends GetView<LayananController> {
               ),
               const Divider(),
               const SizedBox(height: 16),
-              
+
               // Filter by category
               const Text(
                 'Kategori Layanan',
@@ -747,7 +758,7 @@ class LayananView extends GetView<LayananController> {
                   children: [
                     'Semua',
                     'Balita',
-                    'Ibu Hamil', 
+                    'Ibu Hamil',
                     'Imunisasi',
                     'Vitamin',
                     'Konsultasi',
@@ -769,17 +780,18 @@ class LayananView extends GetView<LayananController> {
                         color: controller.selectedCategory.value == category
                             ? const Color(0xFF0F66CD)
                             : Colors.grey[700],
-                        fontWeight: controller.selectedCategory.value == category
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                        fontWeight:
+                            controller.selectedCategory.value == category
+                                ? FontWeight.w600
+                                : FontWeight.normal,
                       ),
                     );
                   }).toList(),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Filter by age range (placeholder)
               const Text(
                 'Rentang Usia',
@@ -801,9 +813,9 @@ class LayananView extends GetView<LayananController> {
                   // Implement age range filtering
                 },
               ),
-              
+
               const Spacer(),
-              
+
               // Action buttons
               Row(
                 children: [

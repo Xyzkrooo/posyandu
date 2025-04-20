@@ -23,7 +23,7 @@ class DashboardView extends GetView<DashboardController> {
                   automaticallyImplyLeading: false,
                   leading: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset('assets/logo_posyandu.jpeg'),
+                    child: Image.asset('assets/logo_posyandu_2.png'),
                   ),
                   title: const Text(
                     "POSYANDU",

@@ -7,6 +7,13 @@ class ChangePasswordView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    // Add these variables to the controller or initialize them here
+    if (controller.isCurrentPasswordVisible.value) {
+      controller.isCurrentPasswordVisible.value = false;
+      controller.isNewPasswordVisible.value = false;
+      controller.isConfirmPasswordVisible.value = false;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Ubah Password'),
@@ -49,51 +56,88 @@ class ChangePasswordView extends GetView<ProfileController> {
                     ],
                   ),
                 ),
-                
+
                 // Current Password
                 TextField(
                   controller: controller.currentPasswordController,
-                  obscureText: true,
+                  obscureText: !controller.isCurrentPasswordVisible.value,
                   decoration: InputDecoration(
                     labelText: 'Password Saat Ini',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        controller.isCurrentPasswordVisible.value
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        controller.isCurrentPasswordVisible.value =
+                            !controller.isCurrentPasswordVisible.value;
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
-                
+
                 // New Password
                 TextField(
                   controller: controller.newPasswordController,
-                  obscureText: true,
+                  obscureText: !controller.isNewPasswordVisible.value,
                   decoration: InputDecoration(
                     labelText: 'Password Baru',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock_open),
-                    helperText: 'Minimal 8 karakter dengan kombinasi huruf dan angka',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        controller.isNewPasswordVisible.value
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        controller.isNewPasswordVisible.value =
+                            !controller.isNewPasswordVisible.value;
+                      },
+                    ),
+                    helperText:
+                        'Minimal 8 karakter dengan kombinasi huruf dan angka',
                   ),
                 ),
                 SizedBox(height: 16),
-                
+
                 // Confirm New Password
                 TextField(
                   controller: controller.confirmPasswordController,
-                  obscureText: true,
+                  obscureText: !controller.isConfirmPasswordVisible.value,
                   decoration: InputDecoration(
                     labelText: 'Konfirmasi Password Baru',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        controller.isConfirmPasswordVisible.value
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        controller.isConfirmPasswordVisible.value =
+                            !controller.isConfirmPasswordVisible.value;
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: 32),
-                
+
                 // Change Password Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: controller.isChangingPassword.value 
-                        ? null 
+                    onPressed: controller.isChangingPassword.value
+                        ? null
                         : () => controller.changePassword(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -104,9 +148,9 @@ class ChangePasswordView extends GetView<ProfileController> {
                         : Text('Ubah Password', style: TextStyle(fontSize: 16)),
                   ),
                 ),
-                
+
                 SizedBox(height: 16),
-                
+
                 // Back to Profile
                 SizedBox(
                   width: double.infinity,

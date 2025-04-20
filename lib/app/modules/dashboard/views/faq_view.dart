@@ -13,60 +13,80 @@ class FAQView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FBFF), // Keeping the soft background
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFF0F66CD), // Changed to match Index primary blue
-        title: Obx(() => controller.isSearching.value
-            ? _buildSearchField()
-            : const Text(
-                "Pertanyaan Umum (FAQ)",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Custom App Bar like in CSView
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              decoration: const BoxDecoration(
+                color: Color(0xFF0F66CD), // Match Index primary blue
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
-              )),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Obx(() => Icon(
-                  controller.isSearching.value ? Icons.close : Icons.search,
-                  color: Colors.white,
-                )),
-            onPressed: () => controller.toggleSearch(),
-          ),
-          IconButton(
-            icon: Obx(() => Icon(
-                  controller.expandAll.value ? Icons.unfold_less : Icons.unfold_more,
-                  color: Colors.white,
-                )),
-            onPressed: () => controller.toggleExpandAll(),
-            tooltip: controller.expandAll.value ? "Tutup Semua" : "Buka Semua",
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Header with illustration
-          Obx(() => !controller.isSearching.value ? _buildHeader() : Container()),
-          
-          // Category chips
-          _buildCategoryChips(),
-          
-          // FAQ list
-          Expanded(
-            child: Obx(() => controller.filteredFaqs.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: controller.filteredFaqs.length,
-                    itemBuilder: (context, index) {
-                      final faq = controller.filteredFaqs[index];
-                      return _buildFaqItem(faq, index);
-                    },
-                  )),
-          ),
-        ],
+              ),
+              child: Row(
+                children: [
+                  // Search button on the left
+                  IconButton(
+                    icon: Obx(() => Icon(
+                      controller.isSearching.value ? Icons.close : Icons.search,
+                      color: Colors.white,
+                    )),
+                    onPressed: () => controller.toggleSearch(),
+                  ),
+                  
+                  // Title with conditional search field
+                  Expanded(
+                    child: Obx(() => controller.isSearching.value
+                      ? _buildSearchField()
+                      : const Text(
+                          "Pertanyaan Umum (FAQ)",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        )
+                    ),
+                  ),
+                  
+                  // Expand/collapse button on the right
+                  IconButton(
+                    icon: Obx(() => Icon(
+                      controller.expandAll.value ? Icons.unfold_less : Icons.unfold_more,
+                      color: Colors.white,
+                    )),
+                    onPressed: () => controller.toggleExpandAll(),
+                    tooltip: controller.expandAll.value ? "Tutup Semua" : "Buka Semua",
+                  ),
+                ],
+              ),
+            ),
+            
+            // Header with illustration (only when not searching)
+            // Obx(() => !controller.isSearching.value ? _buildHeader() : Container()),
+            
+            // Category chips
+            _buildCategoryChips(),
+            
+            // FAQ list
+            Expanded(
+              child: Obx(() => controller.filteredFaqs.isEmpty
+                  ? _buildEmptyState()
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: controller.filteredFaqs.length,
+                      itemBuilder: (context, index) {
+                        final faq = controller.filteredFaqs[index];
+                        return _buildFaqItem(faq, index);
+                      },
+                    )),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -79,78 +99,13 @@ class FAQView extends GetView<DashboardController> {
         hintText: "Cari pertanyaan...",
         hintStyle: TextStyle(color: Colors.white70),
         border: InputBorder.none,
+        contentPadding: EdgeInsets.symmetric(vertical: 10),
       ),
       style: const TextStyle(color: Colors.white),
       cursorColor: Colors.white,
     );
   }
   
-  Widget _buildHeader() {
-    return FadeInDown(
-      duration: const Duration(milliseconds: 800),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
-        decoration: const BoxDecoration(
-          color: Color(0xFF0F66CD), // Changed to match Index primary blue
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x1A000000),
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Temukan jawaban atas pertanyaan Anda",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        "Klik pada pertanyaan untuk melihat jawabannya",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 65,
-                  width: 65,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                  child: Lottie.asset(
-                    'assets/lottie/question_mark.json',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
   
   Widget _buildCategoryChips() {
     return Container(

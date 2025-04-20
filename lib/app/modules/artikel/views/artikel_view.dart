@@ -6,7 +6,6 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 import '../controllers/artikel_controller.dart';
 import 'detail_artikel_view.dart';
 

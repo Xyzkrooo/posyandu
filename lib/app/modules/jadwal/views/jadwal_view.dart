@@ -309,36 +309,41 @@ class JadwalView extends GetView<JadwalController> {
                     : controller.jadwalHariIni;
 
                 if (list.isEmpty) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.event_busy,
-                          size: 100, color: Colors.grey.shade300),
-
-                      const SizedBox(height: 16),
-                      Text(
-                        controller.filteredList.isNotEmpty
-                            ? "Tidak ada kegiatan dalam rentang ini"
-                            : "Tidak ada kegiatan di tanggal ini",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey.shade600,
-                          fontWeight: FontWeight.w500,
-                        ),
+                  return Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.event_busy,
+                              size: 100, color: Colors.grey.shade300),
+                          const SizedBox(height: 16),
+                          Text(
+                            controller.filteredList.isNotEmpty
+                                ? "Tidak ada kegiatan dalam rentang ini"
+                                : "Tidak ada kegiatan di tanggal ini",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton.icon(
+                            onPressed: () => controller.refreshJadwal(),
+                            icon: Icon(Icons.refresh, color: primaryColor),
+                            label: Text(
+                              "Refresh Jadwal",
+                              style: TextStyle(color: primaryColor),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      TextButton.icon(
-                        onPressed: () => controller.refreshJadwal(),
-                        icon: Icon(Icons.refresh, color: primaryColor),
-                        label: Text(
-                          "Refresh Jadwal",
-                          style: TextStyle(color: primaryColor),
-                        ),
-                      ),
-                    ],
+                    ),
                   );
                 }
-
+  
                 return AnimatedList(
                   initialItemCount: list.length,
                   padding: const EdgeInsets.all(16),
@@ -392,7 +397,7 @@ class JadwalView extends GetView<JadwalController> {
             ),
           ),
         ),
-        
+
         // Shimmer calendar
         Padding(
           padding: const EdgeInsets.all(16),
@@ -408,7 +413,7 @@ class JadwalView extends GetView<JadwalController> {
             ),
           ),
         ),
-        
+
         // Shimmer date indicator
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
@@ -425,7 +430,7 @@ class JadwalView extends GetView<JadwalController> {
             ),
           ),
         ),
-        
+
         // Shimmer jadwal list
         Expanded(
           child: Padding(
@@ -466,7 +471,9 @@ class JadwalView extends GetView<JadwalController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.blue.shade100),  // Changed from teal to blue to match new color theme
+          border: Border.all(
+              color: Colors.blue
+                  .shade100), // Changed from teal to blue to match new color theme
         ),
         child: Column(
           children: [

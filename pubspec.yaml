@@ -81,8 +81,9 @@ flutter:
     - assets/lottie/cs_help.json
     - assets/lottie/question_mark.json
     - assets/lottie/search_empty.json
-    - assets/logo_posyandu.jpeg
-    
+    - assets/logo_posyandu.png    
+    - assets/logo_posyandu_2.png    
+    - assets/logo_posyandu.jpeg    
 
   # To add assets to your application, add an assets section, like this:
   # assets:

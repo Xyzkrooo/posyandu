@@ -579,16 +579,17 @@ class ImunisasiView extends GetView<ImunisasiController> {
   }
 
   // Shimmer for tabs
+  // Shimmer for tabs
   Widget _buildShimmerTabs() {
     return Shimmer.fromColors(
       baseColor: Colors.white.withOpacity(0.4),
       highlightColor: Colors.white.withOpacity(0.8),
-      child: TabBar(
-        isScrollable: true,
-        tabs: List.generate(
-          2,
-          (index) => Tab(
-            child: Container(
+      child: Container(
+        height: 48,
+        child: Row(
+          children: List.generate(
+            2,
+            (index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -642,7 +643,7 @@ class ImunisasiView extends GetView<ImunisasiController> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Timeline items Shimmer
           ...List.generate(
             3,
@@ -683,7 +684,7 @@ class ImunisasiView extends GetView<ImunisasiController> {
             ],
           ),
           const SizedBox(width: 16),
-          
+
           // Content Card
           Expanded(
             child: Card(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../utils/string_extensions.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -14,6 +15,12 @@ class ProfileView extends GetView<ProfileController> {
   static const Color lightBlue = Color(0xFFE7F5F9); // Light blue background
   static const Color textColor = Color(0xFF333333);
   static const Color subtleGrey = Color(0xFFF5F5F5);
+
+  // Helper method to capitalize first letter of a string
+  String _capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +347,7 @@ class ProfileView extends GetView<ProfileController> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              profile.role?.capitalize ?? '',
+              _capitalizeFirstLetter(profile.role ?? ''),
               style: const TextStyle(
                 fontSize: 14,
                 color: Colors.white,

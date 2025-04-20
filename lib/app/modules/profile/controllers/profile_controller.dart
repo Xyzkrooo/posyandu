@@ -24,6 +24,11 @@ class ProfileController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  // Password visibility toggles
+  var isCurrentPasswordVisible = false.obs;
+  var isNewPasswordVisible = false.obs;
+  var isConfirmPasswordVisible = false.obs;
+
   // Loading states
   var isLoadingProfile = false.obs;
   var isUpdatingProfile = false.obs;
@@ -211,6 +216,11 @@ class ProfileController extends GetxController {
         newPasswordController.clear();
         confirmPasswordController.clear();
         
+        // Reset visibility toggles
+        isCurrentPasswordVisible.value = false;
+        isNewPasswordVisible.value = false;
+        isConfirmPasswordVisible.value = false;
+        
         Get.snackbar(
           'Sukses',
           'Password berhasil diubah',
@@ -241,64 +251,64 @@ class ProfileController extends GetxController {
       );
     }
   }
+  
   void updateProfilePicture(String imagePath) async {
-  if (imagePath.isEmpty) {
-    Get.snackbar("Gagal", "Silakan pilih gambar terlebih dahulu",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orange,
-        colorText: Colors.white);
-    return;
-  }
-
-  isUpdatingProfile.value = true;
-
-  try {
-    final uri = Uri.parse(BaseUrl.updateProfile);
-    var request = http.MultipartRequest('POST', uri);
-
-    request.headers['Authorization'] = 'Bearer ${token.value}';
-
-    // Kirim foto
-    request.files.add(await http.MultipartFile.fromPath('foto', imagePath));
-
-    // Sertakan field wajib lainnya
-    request.fields['nama'] = nameController.text;
-    request.fields['username'] = usernameController.text;
-    request.fields['no_telp'] = phoneController.text;
-    request.fields['email'] = emailController.text;
-
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-
-    isUpdatingProfile.value = false;
-
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      profileResponse.value = ProfileResponse.fromJson(jsonData);
-
-      Get.snackbar("Sukses", "Foto profil berhasil diperbarui",
+    if (imagePath.isEmpty) {
+      Get.snackbar("Gagal", "Silakan pilih gambar terlebih dahulu",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.orange,
           colorText: Colors.white);
+      return;
+    }
 
-      getProfile(); // refresh data
-    } else {
-      print("Response Body: ${response.body}");
-      Get.snackbar("Gagal", "Gagal memperbarui foto profil",
+    isUpdatingProfile.value = true;
+
+    try {
+      final uri = Uri.parse(BaseUrl.updateProfile);
+      var request = http.MultipartRequest('POST', uri);
+
+      request.headers['Authorization'] = 'Bearer ${token.value}';
+
+      // Kirim foto
+      request.files.add(await http.MultipartFile.fromPath('foto', imagePath));
+
+      // Sertakan field wajib lainnya
+      request.fields['nama'] = nameController.text;
+      request.fields['username'] = usernameController.text;
+      request.fields['no_telp'] = phoneController.text;
+      request.fields['email'] = emailController.text;
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      isUpdatingProfile.value = false;
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        profileResponse.value = ProfileResponse.fromJson(jsonData);
+
+        Get.snackbar("Sukses", "Foto profil berhasil diperbarui",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white);
+
+        getProfile(); // refresh data
+      } else {
+        print("Response Body: ${response.body}");
+        Get.snackbar("Gagal", "Gagal memperbarui foto profil",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
+      }
+    } catch (e) {
+      isUpdatingProfile.value = false;
+      print("Upload Error: $e");
+      Get.snackbar("Error", "Terjadi kesalahan saat upload",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
-  } catch (e) {
-    isUpdatingProfile.value = false;
-    print("Upload Error: $e");
-    Get.snackbar("Error", "Terjadi kesalahan saat upload",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white);
   }
-}
-
 
   void logOut() async {
     try {
@@ -338,5 +348,18 @@ class ProfileController extends GetxController {
         colorText: Colors.white,
       );
     }
+  }
+  
+  // Toggle password visibility functions
+  void toggleCurrentPasswordVisibility() {
+    isCurrentPasswordVisible.value = !isCurrentPasswordVisible.value;
+  }
+  
+  void toggleNewPasswordVisibility() {
+    isNewPasswordVisible.value = !isNewPasswordVisible.value;
+  }
+  
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
   }
 }

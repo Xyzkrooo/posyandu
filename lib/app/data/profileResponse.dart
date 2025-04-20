@@ -27,6 +27,9 @@ class User {
   String? email;
   String? role;
   Null? foto;
+  String? alamat;
+  int? rt;
+  int? rw;
 
   User(
       {this.id,
@@ -35,7 +38,10 @@ class User {
       this.noTelp,
       this.email,
       this.role,
-      this.foto});
+      this.foto,
+      this.alamat,
+      this.rt,
+      this.rw});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -45,6 +51,9 @@ class User {
     email = json['email'];
     role = json['role'];
     foto = json['foto'];
+    alamat = json['alamat'];
+    rt = json['rt'];
+    rw = json['rw'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +65,9 @@ class User {
     data['email'] = this.email;
     data['role'] = this.role;
     data['foto'] = this.foto;
+    data['alamat'] = this.alamat;
+    data['rt'] = this.rt;
+    data['rw'] = this.rw;
     return data;
   }
 }
