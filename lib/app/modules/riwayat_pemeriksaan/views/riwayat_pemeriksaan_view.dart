@@ -115,8 +115,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Icon(Icons.article_outlined,
-                      color: primaryColor, size: 20),
+                  Icon(Icons.article_outlined, color: primaryColor, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     "Riwayat Pemeriksaan",
@@ -266,7 +265,9 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                           Expanded(
                                             child: _buildMeasurementCard(
                                               "Berat Badan",
-                                              "${item.beratBadan} kg",
+                                              item.beratBadan != null
+                                                  ? '${item.beratBadan!.toStringAsFixed(1)} kg'
+                                                  : '-',
                                               Icons.monitor_weight,
                                               Colors.orange.shade700,
                                               statusBerat,
@@ -276,7 +277,9 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                           Expanded(
                                             child: _buildMeasurementCard(
                                               "Tinggi Badan",
-                                              "${item.tinggiBadan} cm",
+                                              item.tinggiBadan != null
+                                                  ? '${item.tinggiBadan} cm'
+                                                  : '-',
                                               Icons.height,
                                               Colors.purple.shade700,
                                               statusTinggi,
@@ -290,7 +293,9 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                           Expanded(
                                             child: _buildMeasurementCard(
                                               "Lingkar Kepala",
-                                              "${item.lingkarKepala} cm",
+                                              item.lingkarKepala != null
+                                                  ? '${item.lingkarKepala!.toStringAsFixed(1)} cm'
+                                                  : '-',
                                               Icons.circle,
                                               primaryColor,
                                               null,
@@ -300,7 +305,9 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                                           Expanded(
                                             child: _buildMeasurementCard(
                                               "Lingkar Lengan",
-                                              "${item.lingkarLengan} cm",
+                                              item.lingkarLengan != null
+                                                  ? '${item.lingkarLengan} cm'
+                                                  : '-',
                                               Icons.accessibility_new,
                                               Colors.teal.shade700,
                                               null,
@@ -366,7 +373,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                 ),
               ),
             ),
-            
+
             // Shimmer for horizontal list
             SizedBox(
               height: 50,
@@ -386,7 +393,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                 },
               ),
             ),
-            
+
             // Shimmer for header
             Padding(
               padding: const EdgeInsets.all(16),
@@ -421,7 +428,7 @@ class RiwayatPemeriksaanView extends GetView<RiwayatPemeriksaanController> {
                 ],
               ),
             ),
-            
+
             // Shimmer for cards
             for (int i = 0; i < 3; i++)
               Padding(

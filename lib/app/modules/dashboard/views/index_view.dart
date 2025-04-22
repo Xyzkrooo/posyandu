@@ -107,7 +107,9 @@ class IndexView extends GetView<DashboardController> {
   }
 
   Widget _buildCountdownJadwal(CountdownJadwal? jadwal) {
-    if (jadwal == null) {
+    if (jadwal == null ||
+        jadwal.tanggalKegiatan == null ||
+        jadwal.waktuMulai == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
@@ -151,8 +153,18 @@ class IndexView extends GetView<DashboardController> {
       );
     }
 
-    final date =
-        DateTime.parse('${jadwal.tanggalKegiatan} ${jadwal.waktuMulai}');
+    DateTime? date;
+    try {
+      // Try to parse the date string safely
+      date = DateTime.parse('${jadwal.tanggalKegiatan} ${jadwal.waktuMulai}');
+    } catch (e) {
+      print("Error parsing date: $e");
+      // Fallback to current date if parsing fails
+      date = DateTime.now().add(const Duration(days: 1));
+    }
+
+    // Safety check - if date is still null, use a fallback
+
     final now = DateTime.now();
     final diff = date.difference(now);
 
@@ -273,6 +285,7 @@ class IndexView extends GetView<DashboardController> {
     );
   }
 
+// Fungsi baru untuk menu navigasi yang lebih bagus
   Widget _buildNavigasiMenu() {
     final List<Map<String, dynamic>> menu = [
       {
@@ -355,11 +368,23 @@ class IndexView extends GetView<DashboardController> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: item['color'].withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 5,
+                            color: item['color'].withOpacity(0.15),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
                         ],
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.white,
+                            item['color'].withOpacity(0.1),
+                          ],
+                        ),
+                        border: Border.all(
+                          color: item['color'].withOpacity(0.3),
+                          width: 1.5,
+                        ),
                       ),
                       child: FaIcon(
                         item['icon'],
@@ -367,7 +392,7 @@ class IndexView extends GetView<DashboardController> {
                         size: 24,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     Text(
                       item['title'],
                       textAlign: TextAlign.center,
@@ -387,6 +412,16 @@ class IndexView extends GetView<DashboardController> {
   }
 
   Widget _buildCarouselArtikel(List<Artikel> artikelList) {
+    // Debug output
+    print("Number of articles: ${artikelList.length}");
+
+    if (artikelList.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Text("Tidak ada artikel tersedia saat ini."),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -416,6 +451,7 @@ class IndexView extends GetView<DashboardController> {
           ),
         ),
         const SizedBox(height: 8),
+        // Add error handling in case of network image issues
         CarouselSlider(
           options: CarouselOptions(
             height: 200,
@@ -451,11 +487,14 @@ class IndexView extends GetView<DashboardController> {
                         child: Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            color: Colors.grey.shade300,
-                            child:
-                                const Icon(Icons.image_not_supported, size: 50),
-                          ),
+                          errorBuilder: (context, error, stackTrace) {
+                            print("Error loading image: $error");
+                            return Container(
+                              color: Colors.grey.shade300,
+                              child: const Icon(Icons.image_not_supported,
+                                  size: 50),
+                            );
+                          },
                         ),
                       ),
                       Container(
@@ -590,25 +629,33 @@ class IndexView extends GetView<DashboardController> {
                         children: [
                           _buildMeasurementItem(
                             'Berat',
-                            '${anak.beratBadan ?? '-'} kg',
+                            anak.beratBadan != null
+                                ? '${anak.beratBadan!.toStringAsFixed(1)} kg'
+                                : '-',
                             FontAwesomeIcons.weightScale,
                             const Color(0xFF4CAF50),
                           ),
                           _buildMeasurementItem(
                             'Tinggi',
-                            '${anak.tinggiBadan ?? '-'} cm',
+                            anak.tinggiBadan != null
+                                ? '${anak.tinggiBadan} cm'
+                                : '-',
                             FontAwesomeIcons.rulerVertical,
                             const Color(0xFFF44336),
                           ),
                           _buildMeasurementItem(
                             'L. Kepala',
-                            '${anak.lingkarKepala ?? '-'} cm',
+                            anak.lingkarKepala != null
+                                ? '${anak.lingkarKepala!.toStringAsFixed(1)} cm'
+                                : '-',
                             FontAwesomeIcons.child,
                             const Color(0xFF9C27B0),
                           ),
                           _buildMeasurementItem(
                             'L. Lengan',
-                            '${anak.lingkarLengan ?? '-'} cm',
+                            anak.lingkarLengan != null
+                                ? '${anak.lingkarLengan} cm'
+                                : '-',
                             FontAwesomeIcons.handHoldingMedical,
                             const Color(0xFF2196F3),
                           ),
@@ -838,31 +885,50 @@ class IndexView extends GetView<DashboardController> {
     return text.replaceAll('\n', ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 
+  // Shimmer yang konsisten dengan desain menu baru
   Widget _buildShimmer() {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header shimmer
-            Shimmer.fromColors(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header shimmer
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 120,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Shimmer untuk jadwal countdown
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               child: Container(
-                height: 120,
+                height: 140,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
-            // Title shimmer for menu section
-            Shimmer.fromColors(
+          // Title shimmer untuk bagian menu
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               child: Container(
@@ -874,38 +940,94 @@ class IndexView extends GetView<DashboardController> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 16),
 
-            // Menu shimmer
-            Shimmer.fromColors(
+          // Menu navigasi shimmer - mencocokkan struktur menu yang sebenarnya
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
-              child: SizedBox(
-                height: 200, // Fixed height for the grid
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 0.85,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemCount: 8,
-                  itemBuilder: (_, __) => Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
+              child: GridView.builder(
+                itemCount: 7, // Sama seperti menu asli (7 item)
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 0.85,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 16,
                 ),
+                itemBuilder: (context, index) {
+                  final colors = [
+                    Colors.grey[300]!,
+                    Colors.grey[200]!,
+                    Colors.grey[400]!,
+                    Colors.grey[300]!,
+                    Colors.grey[200]!,
+                    Colors.grey[400]!,
+                    Colors.grey[300]!,
+                  ];
+                  return Column(
+                    children: [
+                      // Container ikon dengan styling yang sama seperti menu asli
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                          border: Border.all(
+                            color: Colors.grey[200]!,
+                            width: 1.5,
+                          ),
+                        ),
+                        height: 48, // Ukuran yang sama dengan container asli
+                        width: 48,
+                      ),
+                      const SizedBox(height: 8),
+                      // Placeholder untuk teks
+                      Container(
+                        height: 10,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Baris kedua teks untuk item yang memiliki dua baris
+                      if (index != 1 &&
+                          index != 3 &&
+                          index != 6) // Indeks ini memiliki judul satu baris
+                        Container(
+                          height: 10,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
+          ),
 
-            const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-            // Title shimmer for carousel section
-            Shimmer.fromColors(
+          // Konten shimmer lainnya tetap sama
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               child: Row(
@@ -930,26 +1052,29 @@ class IndexView extends GetView<DashboardController> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 16),
 
-            // Carousel shimmer
-            Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
+          // Carousel shimmer
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
             ),
+          ),
 
-            const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-            // Title shimmer for data anak section
-            Shimmer.fromColors(
+          // Title shimmer untuk bagian data anak
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               child: Container(
@@ -961,32 +1086,40 @@ class IndexView extends GetView<DashboardController> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+          ),
+          const SizedBox(height: 12),
 
-            // Cards shimmer for anak
-            ...List.generate(
-              2,
-              (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                    height: 120,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+          // Cards shimmer untuk anak
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: List.generate(
+                2,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 120,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+          ),
 
-            const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-            // Title shimmer for imunisasi section
-            Shimmer.fromColors(
+          // Title shimmer untuk bagian imunisasi
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               child: Container(
@@ -998,31 +1131,36 @@ class IndexView extends GetView<DashboardController> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+          ),
+          const SizedBox(height: 12),
 
-            // Cards shimmer for imunisasi
-            ...List.generate(
-              2,
-              (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                    height: 80,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+          // Cards shimmer untuk imunisasi
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: List.generate(
+                2,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 80,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+          ),
 
-            const SizedBox(height: 20),
-          ],
-        ),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }

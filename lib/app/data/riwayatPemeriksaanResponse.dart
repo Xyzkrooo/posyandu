@@ -27,11 +27,11 @@ class RiwayatPemeriksaanResponse {
 class Data {
   int? idPemeriksaan;
   String? namaAnak;
-  int? beratBadan;
-  int? tinggiBadan;
-  int? lingkarLengan;
-  int? lingkarKepala;
-  Null? asiBlnKe;
+  double? beratBadan;
+  double? tinggiBadan;
+  double? lingkarLengan;
+  double? lingkarKepala;
+  int? asiBlnKe;
   int? asiYaTdk;
   String? tanggalPemeriksaan;
   String? nama;
